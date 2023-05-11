@@ -48,6 +48,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public BigDecimal getCurrencyPriceBySymbol(String symbol) {
+        log.info("Get price of currency by symbol : {}",symbol);
         return currencyRepository.findBySymbol(symbol)
                 .map(Currency::getPrice)
                 .orElseThrow(() -> new ResourceNotFoundException(Currency.class, "symbol", symbol));
@@ -55,6 +56,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public CurrencyDto getCurrencyBySymbol(String symbol) {
+        log.info("Get currency by symbol : {}",symbol);
         return currencyRepository.findBySymbol(symbol)
                 .map(CurrencyMapper.INSTANCE::convert)
                 .orElseThrow(()->new ResourceNotFoundException(Currency.class, "symbol", symbol));

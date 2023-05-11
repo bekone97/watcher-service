@@ -49,6 +49,7 @@ public class CurrencyFollowerServiceImpl implements CurrencyFollowerService {
     @Override
     @Transactional
     public void deleteCurrencyFollower(CurrencyFollowerDtoRequest currencyFollowerDtoRequest) {
+        log.info("Delete currency follower by : {}",currencyFollowerDtoRequest);
         UserDto user = userService.getByUsername(currencyFollowerDtoRequest.getUsername());
         CurrencyDto currency = currencyService.getCurrencyBySymbol(currencyFollowerDtoRequest.getSymbol());
         Optional<CurrencyFollower> currencyFollower = currencyFollowerRepository.findByCurrency_IdAndUser_Id(currency.getId(),

@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto getOrCreate(String username) {
-        log.debug("Get or Create user with username : {}",username);
+        log.info("Get or Create user with username : {}",username);
         return userRepository.findByUsername(username)
                 .map(UserMapper.INSTANCE::convert)
                 .orElseGet(()->UserMapper.INSTANCE.convert(userRepository.save(User.builder()
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getByUsername(String username) {
-        log.debug("Find user by username : {}",username);
+        log.info("Find user by username : {}",username);
         return userRepository.findByUsername(username)
                 .map(UserMapper.INSTANCE::convert)
                 .orElseThrow(()->new ResourceNotFoundException(User.class,"username",username));
