@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOGS" value="./logs"/>
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %black(%d[ISO860]) %highlight(%-5level) [%blue(%t)] %yellow(%C{1}):%msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/spring-blog-service-logger.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C{1} [%t] %m%n</Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS}/archived/blog-service-logger-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.miachyn.watcherservice" level="warn" additivity="false">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="RollingFile"/>
+    </logger>
+    <logger name="logController" level="info" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
+    <Root level="info">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="RollingFile"/>
+    </Root>
+</configuration>
