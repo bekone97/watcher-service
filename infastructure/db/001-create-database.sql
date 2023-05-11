@@ -1,0 +1,2 @@
+CREATE
+DATABASE crypto_currency_db;

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="2023-05-11-changes-create-table-currency_follower" author="a.miachyn">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="currency_follower"/>
+            </not>
+        </preConditions>
+        <createTable tableName="currency_follower">
+            <column name="currency_id" type="BIGSERIAL">
+                <constraints foreignKeyName="fk_currency_follower_currency" references="currency(id)"/>
+            </column>
+            <column name="user_id" type="BIGSERIAL">
+                <constraints foreignKeyName="fk_currency_follower_user" references="currency_user(id)"/>
+            </column>
+            <column name="registration_price" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="currency_follower"
+                       columnNames="currency_id, user_id"
+                       constraintName="ph_currency_follower"/>
+    </changeSet>
+</databaseChangeLog>
