@@ -1,6 +1,8 @@
 package com.miachyn.watcherservice.controller;
 
+import com.miachyn.watcherservice.dto.CurrencyFollowerDto;
 import com.miachyn.watcherservice.dto.CurrencyFollowerDtoRequest;
+import com.miachyn.watcherservice.dto.CurrencyFollowerDtoResponse;
 import com.miachyn.watcherservice.service.CurrencyFollowerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,8 @@ public class CurrencyFollowerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void notify(@Valid @RequestBody CurrencyFollowerDtoRequest currencyFollowerDtoRequest){
-        currencyFollowerService.register(currencyFollowerDtoRequest);
+    public CurrencyFollowerDtoResponse notify(@Valid @RequestBody CurrencyFollowerDtoRequest currencyFollowerDtoRequest){
+        return currencyFollowerService.register(currencyFollowerDtoRequest);
     }
 
     @DeleteMapping

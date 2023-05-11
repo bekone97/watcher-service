@@ -31,4 +31,10 @@ public interface CurrencyFollowerMapper {
     })
     CurrencyFollowerDto convert(CurrencyFollower currencyFollower);
 
+    @Mappings({
+            @Mapping(source = "currencyFollower.user.username",target = "username"),
+            @Mapping(source = "currencyFollower.registrationPrice",target = "registrationPrice"),
+            @Mapping(source = "currencyFollower.currency.symbol",target = "symbol")
+    })
+    CurrencyFollowerDtoResponse convertToResponse(CurrencyFollower currencyFollower);
 }

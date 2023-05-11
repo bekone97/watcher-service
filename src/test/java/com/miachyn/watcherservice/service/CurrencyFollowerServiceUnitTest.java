@@ -1,9 +1,6 @@
 package com.miachyn.watcherservice.service;
 
-import com.miachyn.watcherservice.dto.CurrencyDto;
-import com.miachyn.watcherservice.dto.CurrencyFollowerDto;
-import com.miachyn.watcherservice.dto.CurrencyFollowerDtoRequest;
-import com.miachyn.watcherservice.dto.UserDto;
+import com.miachyn.watcherservice.dto.*;
 import com.miachyn.watcherservice.entity.Currency;
 import com.miachyn.watcherservice.entity.CurrencyFollower;
 import com.miachyn.watcherservice.entity.User;
@@ -50,6 +47,7 @@ class CurrencyFollowerServiceUnitTest {
         UserDto userDto;
         CurrencyFollowerDtoRequest currencyFollowerDtoRequest;
         CurrencyFollowerDto currencyFollowerDto;
+        CurrencyFollowerDtoResponse currencyFollowerDtoResponse;
     @BeforeEach
     void setUp() {
         user = User.builder()
@@ -77,6 +75,7 @@ class CurrencyFollowerServiceUnitTest {
                 .build();
         currencyFollowerDtoRequest = new CurrencyFollowerDtoRequest(user.getUsername(),currency.getSymbol());
         currencyFollowerDto = CurrencyFollowerMapper.INSTANCE.convert(currencyFollower);
+        currencyFollowerDtoResponse = CurrencyFollowerMapper.INSTANCE.convertToResponse(currencyFollower);
     }
 
     @AfterEach
@@ -91,7 +90,7 @@ class CurrencyFollowerServiceUnitTest {
 
     @Test
     void register() {
-        var expected = currencyFollowerDto;
+        var expected = currencyFollowerDtoResponse;
         when(currencyService.getCurrencyBySymbol(currency.getSymbol())).thenReturn(currencyDto);
         when(userService.getOrCreate(user.getUsername())).thenReturn(userDto);
         when(currencyFollowerRepository.save(currencyFollower)).thenReturn(currencyFollower);
