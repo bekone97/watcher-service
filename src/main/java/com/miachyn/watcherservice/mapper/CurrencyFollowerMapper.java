@@ -2,6 +2,7 @@ package com.miachyn.watcherservice.mapper;
 
 import com.miachyn.watcherservice.dto.CurrencyDto;
 import com.miachyn.watcherservice.dto.CurrencyFollowerDto;
+import com.miachyn.watcherservice.dto.CurrencyFollowerDtoResponse;
 import com.miachyn.watcherservice.dto.UserDto;
 import com.miachyn.watcherservice.entity.Currency;
 import com.miachyn.watcherservice.entity.CurrencyFollower;
@@ -29,4 +30,5 @@ public interface CurrencyFollowerMapper {
             @Mapping(source = "currencyFollower.currency.id",target = "currencyId")
     })
     CurrencyFollowerDto convert(CurrencyFollower currencyFollower);
+
 }

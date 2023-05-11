@@ -1,9 +1,6 @@
 package com.miachyn.watcherservice.service.impl;
 
-import com.miachyn.watcherservice.dto.CurrencyDto;
-import com.miachyn.watcherservice.dto.CurrencyFollowerDto;
-import com.miachyn.watcherservice.dto.CurrencyFollowerDtoRequest;
-import com.miachyn.watcherservice.dto.UserDto;
+import com.miachyn.watcherservice.dto.*;
 import com.miachyn.watcherservice.entity.CurrencyFollower;
 import com.miachyn.watcherservice.mapper.CurrencyFollowerMapper;
 import com.miachyn.watcherservice.repository.CurrencyFollowerRepository;
@@ -31,11 +28,12 @@ public class CurrencyFollowerServiceImpl implements CurrencyFollowerService {
 
     @Override
     @Transactional
-    public void register(CurrencyFollowerDtoRequest currencyFollowerDtoRequest) {
+    public CurrencyFollowerDto register(CurrencyFollowerDtoRequest currencyFollowerDtoRequest) {
         log.info("Register new currencyFollower by : {}",currencyFollowerDtoRequest);
         CurrencyDto currencyDto = currencyService.getCurrencyBySymbol(currencyFollowerDtoRequest.getSymbol());
         UserDto userDto = userService.getOrCreate(currencyFollowerDtoRequest.getUsername());
-        currencyFollowerRepository.save(CurrencyFollowerMapper.INSTANCE.convert(currencyDto, userDto));
+        CurrencyFollower currencyFollower = currencyFollowerRepository.save(CurrencyFollowerMapper.INSTANCE.convert(currencyDto, userDto));
+        return CurrencyFollowerMapper.INSTANCE.convert(currencyFollower);
     }
 
     @Override

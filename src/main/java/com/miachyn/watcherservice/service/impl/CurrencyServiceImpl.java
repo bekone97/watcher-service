@@ -27,6 +27,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     private final CurrencyRepository currencyRepository;
     private final List<CurrencyDto> currencies;
+
     @Override
     public List<CurrencyDtoResponse> getCurrencies() {
         return currencies.stream()
@@ -40,7 +41,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         log.debug("Save currency by : {} and {}",currencyDto, currencyDtoClientResponse);
         if (currencyDto.getId().equals(currencyDtoClientResponse.getId())
                 && currencyDto.getSymbol().equals(currencyDtoClientResponse.getSymbol())){
-            Currency currency = currencyRepository.save(CurrencyMapper.INSTANCE.convert(currencyDtoClientResponse, LocalDateTime.now()));
+            Currency currency = currencyRepository.save(CurrencyMapper.INSTANCE.convert(currencyDtoClientResponse));
             return CurrencyMapper.INSTANCE.convert(currency);
         }
         throw new InconsistentDataException(currencyDto, currencyDtoClientResponse);
@@ -52,8 +53,8 @@ public class CurrencyServiceImpl implements CurrencyService {
         return currencyRepository.findBySymbol(symbol)
                 .map(Currency::getPrice)
                 .orElseThrow(() -> new ResourceNotFoundException(Currency.class, "symbol", symbol));
-    }
 
+    }
     @Override
     public CurrencyDto getCurrencyBySymbol(String symbol) {
         log.info("Get currency by symbol : {}",symbol);

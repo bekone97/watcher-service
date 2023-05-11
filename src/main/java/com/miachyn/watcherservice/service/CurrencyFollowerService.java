@@ -6,7 +6,7 @@ import com.miachyn.watcherservice.dto.CurrencyFollowerDtoRequest;
 import java.util.List;
 
 public interface CurrencyFollowerService {
-    void register(CurrencyFollowerDtoRequest currencyFollowerDtoRequest);
+    CurrencyFollowerDto register(CurrencyFollowerDtoRequest currencyFollowerDtoRequest);
 
     List<CurrencyFollowerDto> findAllByCurrencyId(Long id);
 

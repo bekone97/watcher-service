@@ -26,6 +26,4 @@ public class Currency {
     @Column
     private BigDecimal price;
 
-    @Column(name = "registration_time")
-    private Timestamp registrationTime;
 }

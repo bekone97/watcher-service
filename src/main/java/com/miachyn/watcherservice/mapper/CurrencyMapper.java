@@ -9,9 +9,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 @Mapper
 public interface CurrencyMapper {
     CurrencyMapper INSTANCE = Mappers.getMapper(CurrencyMapper.class);
@@ -19,23 +16,13 @@ public interface CurrencyMapper {
     @Mappings({
             @Mapping(source = "currency.id",target = "id"),
             @Mapping(source = "currency.symbol",target = "symbol"),
-            @Mapping(source = "currency.price",target = "price"),
-            @Mapping(source = "registrationTime",target = "registrationTime")
+            @Mapping(source = "currency.price",target = "price")
     })
-    Currency convert(CurrencyDtoClientResponse currency, LocalDateTime registrationTime);
+    Currency convert(CurrencyDtoClientResponse currency);
 
 
     CurrencyDto convert(Currency currency);
 
     CurrencyDtoResponse convert(CurrencyDto currencyDto);
 
-    default LocalDateTime map(Timestamp timestamp){
-        return timestamp == null ? null :
-                timestamp.toLocalDateTime();
-    }
-
-    default Timestamp map(LocalDateTime localDateTime){
-        return localDateTime == null ? null :
-                Timestamp.valueOf(localDateTime);
-    }
 }

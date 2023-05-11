@@ -19,9 +19,6 @@
             <column name="price" type="decimal">
                 <constraints nullable="false"/>
             </column>
-            <column name="registration_time" type="datetime">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>
