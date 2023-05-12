@@ -1,0 +1,7 @@
+currency_user:
+  -
+    id: 1
+    username: "Artem"
+  -
+    id: 2
+    username: "Another_artem"

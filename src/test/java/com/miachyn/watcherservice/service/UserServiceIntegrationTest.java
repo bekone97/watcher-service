@@ -3,29 +3,23 @@ package com.miachyn.watcherservice.service;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.miachyn.watcherservice.dto.UserDto;
 import com.miachyn.watcherservice.entity.User;
 import com.miachyn.watcherservice.exception.ResourceNotFoundException;
 import com.miachyn.watcherservice.initializer.DatabaseContainerInitializer;
 import com.miachyn.watcherservice.mapper.UserMapper;
-import com.miachyn.watcherservice.repository.UserRepository;
-import com.miachyn.watcherservice.service.impl.UserServiceImpl;
+import com.miachyn.watcherservice.scheduler.ScheduleService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @DBRider
@@ -36,6 +30,9 @@ class UserServiceIntegrationTest extends DatabaseContainerInitializer {
     @Autowired
     private UserService userService;
 
+    @MockBean
+    private ScheduleService scheduleService;
+
     User user;
     UserDto userDto;
 
@@ -43,7 +40,7 @@ class UserServiceIntegrationTest extends DatabaseContainerInitializer {
     void setUp() {
         user = User.builder()
                 .id(1L)
-                .username("miachyn")
+                .username("Artem")
                 .build();
         userDto = UserMapper.INSTANCE.convert(user);
     }
@@ -55,55 +52,55 @@ class UserServiceIntegrationTest extends DatabaseContainerInitializer {
     }
 
     @Test
-    @DataSet
+    @DataSet(value = {"dataset/init/currencyUser/init.yaml"},
+            useSequenceFiltering = false,
+            executeScriptsAfter = {"scripts/cleanCurrencyUser.sql"})
+    @ExpectedDataSet(value =  {"dataset/expected/currencyUser/nothingHappened.yaml"})
     void getOrCreateFirstCase() {
         var expected = userDto;
-        var newUser = User.builder()
-                .username(user.getUsername()).build();
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         var actual = userService.getOrCreate(user.getUsername());
 
         assertEquals(expected, actual);
-        verify(userRepository).findByUsername(user.getUsername());
-        verify(userRepository,never()).save(newUser);
     }
 
     @Test
+    @DataSet(value = {"dataset/init/currencyUser/init.yaml"},
+            useSequenceFiltering = false,
+            executeScriptsAfter = {"scripts/cleanCurrencyUser.sql"},
+            executeScriptsBefore = {"scripts/currencyUserSequence.sql"})
+    @ExpectedDataSet(value =  {"dataset/expected/currencyUser/save.yaml"})
     void getOrCreateSecondCase() {
-        var expected = userDto;
-        var newUser = User.builder()
-                .username(user.getUsername()).build();
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-        when(userRepository.save(newUser)).thenReturn(user);
+        var expected = new UserDto(2L,"Another_artem");
 
-        var actual = userService.getOrCreate(user.getUsername());
+        var actual = userService.getOrCreate(expected.getUsername());
 
         assertEquals(expected, actual);
-        verify(userRepository).findByUsername(user.getUsername());
-        verify(userRepository).save(newUser);
     }
 
     @Test
+    @DataSet(value = {"dataset/init/currencyUser/init.yaml"},
+            useSequenceFiltering = false,
+            executeScriptsAfter = {"scripts/cleanCurrencyUser.sql"})
     void getByUsername() {
         var expected = userDto;
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         var actual = userService.
                 getByUsername(user.getUsername());
 
         assertEquals(expected,actual);
-        verify(userRepository).findByUsername(user.getUsername());
     }
+
     @Test
+    @DataSet(value = {"dataset/init/currencyUser/init.yaml"},
+            useSequenceFiltering = false,
+            executeScriptsAfter = {"scripts/cleanCurrencyUser.sql"})
     void getByUsernameFail() {
-        var expected = userDto;
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+        var username = "someName";
 
         Exception actual = assertThrows(ResourceNotFoundException.class, () -> userService.
-                getByUsername(user.getUsername()));
+                getByUsername(username));
 
-        assertTrue(actual.getMessage().contains("User wasn't found by username="+user.getUsername()));
-        verify(userRepository).findByUsername(user.getUsername());
+        assertTrue(actual.getMessage().contains("User wasn't found by username="+username));
     }
 }

@@ -1,0 +1,2 @@
+DELETE FROM
+currency_follower;
