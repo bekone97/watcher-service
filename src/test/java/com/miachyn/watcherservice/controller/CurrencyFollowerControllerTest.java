@@ -1,13 +1,9 @@
 package com.miachyn.watcherservice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.miachyn.watcherservice.dto.CurrencyDtoResponse;
-import com.miachyn.watcherservice.dto.CurrencyFollowerDto;
 import com.miachyn.watcherservice.dto.CurrencyFollowerDtoRequest;
 import com.miachyn.watcherservice.dto.CurrencyFollowerDtoResponse;
 import com.miachyn.watcherservice.service.CurrencyFollowerService;
-import com.miachyn.watcherservice.service.CurrencyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -56,7 +51,7 @@ class CurrencyFollowerControllerTest {
     @Test
     void testNotify() throws Exception {
         var expected = currencyFollowerDtoResponse;
-        when(currencyFollowerService.register(currencyFollowerDtoRequest)).thenReturn(expected);
+        when(currencyFollowerService.saveCurrencyFollower(currencyFollowerDtoRequest)).thenReturn(expected);
 
         var actual = mockMvc.perform(post("/notify")
                         .contentType(APPLICATION_JSON)
@@ -65,7 +60,7 @@ class CurrencyFollowerControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(expected),actual);
-        verify(currencyFollowerService).register(currencyFollowerDtoRequest);
+        verify(currencyFollowerService).saveCurrencyFollower(currencyFollowerDtoRequest);
     }
 
     @Test
@@ -80,7 +75,7 @@ class CurrencyFollowerControllerTest {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
                 .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(expectedMessage)));
 
-        verify(currencyFollowerService,never()).register(currencyFollowerDtoRequest);
+        verify(currencyFollowerService,never()).saveCurrencyFollower(currencyFollowerDtoRequest);
     }
 
     @Test

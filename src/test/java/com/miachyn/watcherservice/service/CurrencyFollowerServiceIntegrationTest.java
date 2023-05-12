@@ -89,7 +89,7 @@ class CurrencyFollowerServiceIntegrationTest {
             executeScriptsAfter = {"scripts/cleanCurrencyFollower.sql"})
     @ExpectedDataSet(value = {"dataset/expected/currencyFollower/register.yaml"})
     void register() {
-        currencyFollowerService.register(currencyFollowerDtoRequest);
+        currencyFollowerService.saveCurrencyFollower(currencyFollowerDtoRequest);
     }
 
     @Test

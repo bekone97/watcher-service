@@ -43,10 +43,18 @@ public class ApiExceptionHandler {
         ValidationErrorResponse errorResponse = new ValidationErrorResponse(exception.getConstraintViolations().stream()
                 .map(set -> new ValidationMessage(set.getPropertyPath().toString(), set.getMessage()))
                 .collect(Collectors.toList()));
-        log.warn("The {}.Validation messages :{} and url of request :{}",
+        log.error("The {}.Validation messages :{} and url of request :{}",
                 exception.getClass().getSimpleName(), errorResponse.getValidationMessages(), request.getRequestURL());
 
         return errorResponse;
+    }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleRuntimeException(HttpServletRequest request, RuntimeException exception){
+        log.error("The {}. Exception message : {} and url of request : {}",
+                exception.getClass().getSimpleName(),exception.getMessage(),request.getRequestURL());
+        return new ApiErrorResponse("Something wrong. Try again");
     }
 
 }

@@ -95,7 +95,7 @@ class CurrencyFollowerServiceUnitTest {
         when(userService.getOrCreate(user.getUsername())).thenReturn(userDto);
         when(currencyFollowerRepository.save(currencyFollower)).thenReturn(currencyFollower);
 
-        var actual  = currencyFollowerService.register(currencyFollowerDtoRequest);
+        var actual  = currencyFollowerService.saveCurrencyFollower(currencyFollowerDtoRequest);
 
         assertEquals(expected,actual);
         verify(currencyService).getCurrencyBySymbol(currency.getSymbol());

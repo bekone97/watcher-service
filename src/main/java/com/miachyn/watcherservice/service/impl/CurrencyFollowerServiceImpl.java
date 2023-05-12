@@ -28,7 +28,7 @@ public class CurrencyFollowerServiceImpl implements CurrencyFollowerService {
 
     @Override
     @Transactional
-    public CurrencyFollowerDtoResponse register(CurrencyFollowerDtoRequest currencyFollowerDtoRequest) {
+    public CurrencyFollowerDtoResponse saveCurrencyFollower(CurrencyFollowerDtoRequest currencyFollowerDtoRequest) {
         log.info("Register new currencyFollower by : {}",currencyFollowerDtoRequest);
         CurrencyDto currencyDto = currencyService.getCurrencyBySymbol(currencyFollowerDtoRequest.getSymbol());
         UserDto userDto = userService.getOrCreate(currencyFollowerDtoRequest.getUsername());
