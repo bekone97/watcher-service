@@ -1,0 +1,9 @@
+currency:
+  -
+    id: 90
+    symbol: BTC
+    price: 27171.26
+  -
+    id: 100
+    symbol: ETH
+    price: 1806.77

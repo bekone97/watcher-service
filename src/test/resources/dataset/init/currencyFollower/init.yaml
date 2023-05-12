@@ -1,0 +1,5 @@
+currency_follower:
+  -
+    currency_id: 90
+    user_id: 1
+    registration_price: 27171.26

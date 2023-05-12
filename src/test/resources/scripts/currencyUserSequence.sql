@@ -1,0 +1,1 @@
+ALTER SEQUENCE currency_user_id_seq RESTART WITH 2;
