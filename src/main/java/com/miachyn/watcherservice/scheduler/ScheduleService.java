@@ -5,6 +5,7 @@ import com.miachyn.watcherservice.dto.CurrencyDto;
 import com.miachyn.watcherservice.dto.CurrencyDtoClientResponse;
 import com.miachyn.watcherservice.service.CurrencyFollowerService;
 import com.miachyn.watcherservice.service.CurrencyService;
+import com.miachyn.watcherservice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,7 +24,7 @@ public class ScheduleService {
     private final CurrencyService currencyService;
     private final CryptoApiClient cryptoApiClient;
     private final CurrencyFollowerService currencyFollowerService;
-
+    private final NotificationService notificationService;
 
     @Scheduled(fixedDelayString = "${schedule.work}")
     public void updatePriceOfCurrency() {
@@ -42,8 +43,7 @@ public class ScheduleService {
                             BigDecimal percentage =
                                     calculatePriceChangePercentage(currencyFollower.getRegistrationPrice(), currencyDto.getPrice());
                             if (percentage.abs().compareTo(BigDecimal.ONE) > 0)
-                                log.warn("The currency with symbol : {} changed by : {} for user : {}",
-                                        currencyDto.getSymbol(), percentage, currencyFollower.getUsername());
+                                notificationService.makeNotify(currencyDto.getSymbol(),percentage,currencyFollower.getUsername());
                         });
     }
 
